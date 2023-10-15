@@ -19,7 +19,6 @@ public class MarksProcessing {
         double average = 0;
         for (int values : data) {
             average += (double) values;
-            System.out.println(values);
         }
         average = average / data.length();
         return average;

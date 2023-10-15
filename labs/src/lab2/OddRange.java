@@ -52,7 +52,7 @@ public class OddRange implements Iterable<Integer> {
     }
 
     public static void main(String[] args) {
-        OddRange range = new OddRange(-6, 6);
+        OddRange range = new OddRange(-6, 5);
         for (int num : range) {
             System.out.println(num);
         }
