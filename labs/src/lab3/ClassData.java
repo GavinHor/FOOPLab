@@ -1,12 +1,13 @@
 package lab3;
 import java.lang.reflect.*;
 import java.util.Set;
-import  java.util.HashSet;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
+
 public class ClassData {
     Set<Class<?>> classes = new HashSet<>();
-    //should links be a set?
+    //should links be a set?, going to be unique so not needed to have duplicates
     List<Link> links = new ArrayList<>();
 
 
@@ -30,21 +31,20 @@ public class ClassData {
     //////////////////////////////////////////////////////////////////
     public void findDependencies() {
         for (Class<?> c : classes) {
-            for (Field f : c.getDeclaredFields()) {
-                // Check if the field type is one of the classes in the set
-                if (classes.contains(f.getType())) {
-                    links.add(new Link(c, f.getType(), LinkType.DEPENDANCY));
-                    // Recursively inspect dependencies of the field's type
-                    inspectType(c, f.getGenericType());
-                }
+            for(Class<?> j : c.getDeclaredClasses())
+            {
+                links.add(new Link(c, j, LinkType.DEPENDANCY));
             }
         }
     }
     ///////////////////////////////////////////////////////////////////
     private void inspectType(Class<?> c, Type type) {
         if(type instanceof ParameterizedType) {
-            for(Type argument : ((ParameterizedType) type).getActualTypeArguments()) {
-                links.add(new Link(c, (Class<?>) argument, LinkType.DEPENDANCY));
+            ParameterizedType t = (ParameterizedType) type;
+            for(Type argument : t.getActualTypeArguments()) {
+                if(classes.contains(argument)) {
+                    links.add(new Link(c,(Class<?>) argument, LinkType.DEPENDANCY));
+                }
                 inspectType(c, argument);
             }
         }
@@ -88,9 +88,13 @@ public class ClassData {
                     .append("(");
             Type[] parameterTypes = m.getGenericParameterTypes();
             for(Type type : parameterTypes) {
-                sb.append(type.getTypeName() + " ");
+                sb.append(type.getTypeName() + ",");
             }
-            sb.append("): ")
+            if(parameterTypes.length > 0)
+            {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            sb.append(") ")
                     .append(m.getReturnType().getSimpleName())
                     .append("\n");
             for(Parameter p:m.getParameters()){

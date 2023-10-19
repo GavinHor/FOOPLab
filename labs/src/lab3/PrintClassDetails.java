@@ -26,12 +26,13 @@ public class PrintClassDetails {
             System.out.println();
         }
 
-        System.out.println("\nMethods: ");
+        System.out.println("Methods: ");
         for (Method method : c.getDeclaredMethods()) {
             System.out.println(method);
-            Type[] parameterTypes = method.getGenericParameterTypes();
-            for(Type paramType : parameterTypes) {
-                printType(method.getName(), paramType);
+            System.out.println("Return Type: " + method.getGenericReturnType());
+            Parameter[] parameters = method.getParameters();
+            for(Parameter p : parameters) {
+                System.out.println("Argument type and name: (" + p.getType() + " " + p.getName() + ")");
             }
             System.out.println();
         }

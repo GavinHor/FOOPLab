@@ -9,6 +9,7 @@ public class UMLShapesExample {
         classes.add(MyShape.class);
         classes.add(MyCircle.class);
         classes.add(Connector.class);
+        classes.add(MyCircle.testClass.class);
         ClassData cd = new ClassData(classes);
         System.out.println(cd.toMermaid());
     }
